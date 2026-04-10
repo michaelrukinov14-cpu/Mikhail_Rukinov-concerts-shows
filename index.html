@@ -8,6 +8,60 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* СТИЛИ ДЛЯ ФОНОВЫХ ИЗОБРАЖЕНИЙ В КАРТОЧКАХ (в дополнение к style.css) */
+        .concert-card {
+            position: relative;          /* контекст для абсолютного позиционирования фона */
+            background-size: cover;       /* растягиваем фото на всю карточку */
+            background-position: center;  /* центрируем */
+            background-repeat: no-repeat;
+            isolation: isolate;           /* создаём новый контекст наложения */
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* затемняющий слой — полупрозрачный чёрный, чтобы текст читался */
+        .concert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.45); /* приглушает яркость фото, можно регулировать */
+            z-index: 1;                 /* над фоном, но под контентом */
+            border-radius: inherit;
+            pointer-events: none;       /* чтобы клики по кнопкам проходили */
+            transition: background-color 0.2s ease;
+        }
+
+        /* весь контент карточки должен быть выше затемнения */
+        .concert-card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* слегка усилим читаемость текста на фоне */
+        .concert-card .concert-title,
+        .concert-card .concert-date,
+        .concert-card .concert-venue,
+        .concert-card .price {
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+
+        /* для светлой темы можно немного подкорректировать затемнение (не обязательно, но добавим адаптив) */
+        body.light .concert-card::before {
+            background-color: rgba(0, 0, 0, 0.35);
+        }
+        body.dark .concert-card::before {
+            background-color: rgba(0, 0, 0, 0.55);
+        }
+
+        /* гарантируем, что кнопка остаётся кликабельной и поверх всего */
+        .concert-card .btn-small {
+            position: relative;
+            z-index: 5;
+        }
+    </style>
 </head>
 <body>
 <div class="snap-container">
@@ -43,35 +97,39 @@
             <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Афиша концертов</h2>
             <p style="margin-bottom: 2rem; color: #5A5A62;">Выберите дату и город</p>
             <div class="cards-grid">
-                <div class="concert-card">
-                    <h2  class="concert-title">ABBA  Волшебная королева</h2>
+                <!-- ВАЖНО: data-bg — сюда вставляйте ссылку на фото. 
+                     Для демонстрации использованы бесплатные изображения с Unsplash, 
+                     вы можете заменить их на свои ссылки. 
+                     Фото приглушено с помощью ::before слоя -->
+                <div class="concert-card" data-bg="https://drive.google.com/file/d/1NqHQCZ2s9jXVpFyjVs-FlY0ZE-7fUaK5/view?usp=drivesdk">
+                    <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ЧТ, 30 АПРЕЛЯ 2026, 19:00</div>
                     <div class="concert-title">Орск</div>
                     <div class="concert-venue">ДК «Нефтехимиков»<br>Пр-кт Ленина, 41</div>
                     <div class="price">от 500 ₽</div>
-                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В МОСКВЕ -->
+                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В ОРСКЕ -->
                     <a href="https://iframeab-pre11382.intickets.ru/seance/71257041/" class="btn-small ticket-link">Купить билет</a>
                 </div>
-                <div class="concert-card">
-                    <h2  class="concert-title">ABBA  Волшебная королева</h2>
+                <div class="concert-card" data-bg="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
+                    <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ПН, 18 МАЯ 2026, 19:00</div>
                     <div class="concert-title">Казань</div>
                     <div class="concert-venue">ДК «Железнодорожников»</div>
                     <div class="price">от 1 000 ₽</div>
-                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В САНКТ-ПЕТЕРБУРГЕ -->
+                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В КАЗАНИ -->
                     <a href="https://kzn.kassir.ru/koncert/abba-volshebnaya-koroleva#3488053" class="btn-small ticket-link">Купить билет</a>
                 </div>
-                <div class="concert-card">
-                    <h2  class="concert-title">Жемчужины рока</h2>
+                <div class="concert-card" data-bg="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
+                    <h2 class="concert-title">Жемчужины рока</h2>
                     <div class="concert-date">ЧТ, 12 НОЯБРЯ 2026, 19:00</div>
                     <div class="concert-title">Оренбург</div>
                     <div class="concert-venue">ДК и С «Газовик»<br>Ул. Чкалова, 1</div>
                     <div class="price">от 500 ₽</div>
-                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В НИЖНЕМ НОВГОРОДЕ -->
+                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В ОРЕНБУРГЕ -->
                     <a href="https://orenburg.kassir.ru/koncert/dkis-gazovik/mihail-rukinov-jemchujinyi-roka_2026-04-28" class="btn-small ticket-link">Купить билет</a>
                 </div>
-                    <div class="concert-card">
-                    <h2  class="concert-title">ABBA  Волшебная королева</h2>
+                <div class="concert-card" data-bg="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
+                    <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ЧТ, 19 МАЯ 2026, 19:00</div>
                     <div class="concert-title">Йошкар-Ола</div>
                     <div class="concert-venue">ДК им. «В.И. Ленина»</div>
@@ -178,6 +236,29 @@
         sections[0].style.opacity = '1';
         sections[0].style.transform = 'translateY(0)';
     }, 100);
+
+    // === НОВЫЙ БЛОК: УСТАНОВКА ФОНОВЫХ ИЗОБРАЖЕНИЙ ПО data-bg ===
+    // Проходим по всем карточкам и если есть data-bg — применяем как background-image
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.concert-card');
+        cards.forEach(card => {
+            const bgUrl = card.getAttribute('data-bg');
+            if (bgUrl) {
+                card.style.backgroundImage = `url('${bgUrl}')`;
+            }
+        });
+    });
+    // Если карточки могут добавляться динамически (не в нашем случае), но сделаем надёжно.
+    // Также можно сразу применить для уже существующих.
+    (function applyBackgrounds() {
+        const cards = document.querySelectorAll('.concert-card');
+        cards.forEach(card => {
+            const bgUrl = card.getAttribute('data-bg');
+            if (bgUrl && !card.style.backgroundImage) {
+                card.style.backgroundImage = `url('${bgUrl}')`;
+            }
+        });
+    })();
 </script>
 </body>
 </html>
