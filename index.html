@@ -113,7 +113,7 @@
                 </div>
                 <div>
                     <p><strong>Телефон:</strong> <a href="tel:+79916814230" style="color:#8B5E2C; text-decoration:none;">+7-991-681-42-30</a></p>
-                    <p><strong>Email:</strong> <a href="mailto:m.rukinov@example.com" style="color:#8B5E2C; text-decoration:none;">rumillini@yandex.ru</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:rumillini@yandex.ru" style="color:#8B5E2C; text-decoration:none;">rumillini@yandex.ru</a></p>
                 </div>
             </div>
             <footer>
@@ -183,29 +183,6 @@
         sections[0].style.opacity = '1';
         sections[0].style.transform = 'translateY(0)';
     }, 100);
-
-    // === НОВЫЙ БЛОК: УСТАНОВКА ФОНОВЫХ ИЗОБРАЖЕНИЙ ПО data-bg ===
-    // Проходим по всем карточкам и если есть data-bg — применяем как background-image
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.concert-card');
-        cards.forEach(card => {
-            const bgUrl = card.getAttribute('data-bg');
-            if (bgUrl) {
-                card.style.backgroundImage = `url('${bgUrl}')`;
-            }
-        });
-    });
-    // Если карточки могут добавляться динамически (не в нашем случае), но сделаем надёжно.
-    // Также можно сразу применить для уже существующих.
-    (function applyBackgrounds() {
-        const cards = document.querySelectorAll('.concert-card');
-        cards.forEach(card => {
-            const bgUrl = card.getAttribute('data-bg');
-            if (bgUrl && !card.style.backgroundImage) {
-                card.style.backgroundImage = `url('${bgUrl}')`;
-            }
-        });
-    })();
 </script>
 </body>
 </html>
