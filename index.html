@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    </style>
 </head>
 <body>
 <div class="snap-container">
@@ -19,6 +18,8 @@
             <li><a href="#home">Главная</a></li>
             <li><a href="#tour">Афиша</a></li>
             <li><a href="#news">Новости</a></li>
+            <li><a href="#reviews">Отзывы</a></li>
+            <li><a href="#gallery" class="gallery-link">Галерея</a></li>
             <li><a href="#contact">Контакты</a></li>
             <li><button class="theme-toggle" id="themeToggle">🌙</button></li>
         </ul>
@@ -33,7 +34,6 @@
             <div class="date-badge">БЛИЖАЙШИЙ КОНЦЕРТ • 30 АПРЕЛЯ 2026</div>
             <h1>Михаил Рукинов<br>Новая программа «ABBA<br>Волшебная королева»</h1>
             <p>Авторское шоу, живой звук, премьеры песен и атмосфера полного погружения.</p>
-            <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" В ГЛАВНОМ БЛОКЕ -->
             <a href="https://iframeab-pre11382.intickets.ru/seance/71257041/" class="btn" id="buyTicketBtn">Купить билет →</a>
         </div>
     </section>
@@ -44,17 +44,12 @@
             <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Афиша концертов</h2>
             <p style="margin-bottom: 2rem; color: #5A5A62;">Выберите дату и город</p>
             <div class="cards-grid">
-                <!-- ВАЖНО: data-bg — сюда вставляйте ссылку на фото. 
-                     Для демонстрации использованы бесплатные изображения с Unsplash, 
-                     вы можете заменить их на свои ссылки. 
-                     Фото приглушено с помощью ::before слоя -->
                 <div class="concert-card" data-bg="https://drive.google.com/file/d/1NqHQCZ2s9jXVpFyjVs-FlY0ZE-7fUaK5/view?usp=drivesdk">
                     <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ЧТ, 30 АПРЕЛЯ 2026, 19:00</div>
                     <div class="concert-title">Орск</div>
                     <div class="concert-venue">ДК «Нефтехимиков»<br>Пр-кт Ленина, 41</div>
                     <div class="price">от 500 ₽</div>
-                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В ОРСКЕ -->
                     <a href="https://iframeab-pre11382.intickets.ru/seance/71257041/" class="btn-small ticket-link">Купить билет</a>
                 </div>
                 <div class="concert-card" data-bg="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
@@ -63,7 +58,6 @@
                     <div class="concert-title">Казань</div>
                     <div class="concert-venue">ДК «Железнодорожников»</div>
                     <div class="price">от 1 000 ₽</div>
-                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В КАЗАНИ -->
                     <a href="https://kzn.kassir.ru/koncert/abba-volshebnaya-koroleva#3488053" class="btn-small ticket-link">Купить билет</a>
                 </div>
                 <div class="concert-card" data-bg="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
@@ -72,7 +66,6 @@
                     <div class="concert-title">Оренбург</div>
                     <div class="concert-venue">ДК и С «Газовик»<br>Ул. Чкалова, 1</div>
                     <div class="price">от 500 ₽</div>
-                    <!-- ССЫЛКА ДЛЯ КНОПКИ "КУПИТЬ БИЛЕТ" НА КОНЦЕРТ В ОРЕНБУРГЕ -->
                     <a href="https://orenburg.kassir.ru/koncert/dkis-gazovik/mihail-rukinov-jemchujinyi-roka_2026-04-28" class="btn-small ticket-link">Купить билет</a>
                 </div>
                 <div class="concert-card" data-bg="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
@@ -101,7 +94,70 @@
         </div>
     </section>
 
-    <!-- БЛОК 4: КОНТАКТЫ -->
+    <!-- БЛОК 4: ОТЗЫВЫ -->
+    <section id="reviews" class="section">
+        <div class="container">
+            <h2 style="font-size: 2.2rem; margin-bottom: 1rem;">Отзывы</h2>
+            <p style="margin-bottom: 1rem;">Оставьте свой отзыв о концерте</p>
+            
+            <div class="reviews-container">
+                <div class="review-form">
+                    <div class="form-group">
+                        <label>Ваше имя</label>
+                        <input type="text" id="reviewName" placeholder="Введите ваше имя" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label>Оценка</label>
+                        <div class="rating-input" id="ratingInput">
+                            <span class="star-rating" data-rating="1">☆</span>
+                            <span class="star-rating" data-rating="2">☆</span>
+                            <span class="star-rating" data-rating="3">☆</span>
+                            <span class="star-rating" data-rating="4">☆</span>
+                            <span class="star-rating" data-rating="5">☆</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ваш отзыв</label>
+                        <textarea id="reviewText" rows="4" placeholder="Поделитесь впечатлениями..."></textarea>
+                    </div>
+                    <button class="btn" id="submitReview">Оставить отзыв</button>
+                </div>
+                
+                <div class="reviews-list" id="reviewsList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- БЛОК 5: ГАЛЕРЕЯ -->
+    <section id="gallery" class="section">
+        <div class="container">
+            <h2 style="font-size: 2.2rem; margin-bottom: 1rem;">Галерея</h2>
+            <p style="margin-bottom: 1rem;">Фото и видео с концертов</p>
+            
+            <!-- Панель администратора (изначально скрыта) -->
+            <div class="admin-panel hidden" id="adminPanel">
+                <div class="admin-login" id="adminLoginForm">
+                    <input type="password" id="adminPassword" placeholder="Введите пароль" autocomplete="off">
+                    <button class="btn-small" id="loginBtn">Войти</button>
+                    <button class="btn-small" id="logoutBtn" style="display:none;">Выйти</button>
+                </div>
+                <div class="admin-upload-area hidden" id="adminUploadArea">
+                    <div class="admin-controls">
+                        <label class="file-label" for="mediaUpload">📸 Выбрать файлы</label>
+                        <input type="file" id="mediaUpload" accept="image/*,video/*" multiple>
+                        <button class="btn-small" id="uploadBtn">Загрузить</button>
+                    </div>
+                    <div class="preview-container" id="previewContainer"></div>
+                </div>
+            </div>
+            
+            <button class="btn-small" id="showAdminBtn" style="margin-bottom: 1.5rem;">🔐 Админ</button>
+            
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+    </section>
+
+    <!-- БЛОК 6: КОНТАКТЫ -->
     <section id="contact" class="section">
         <div class="container">
             <h2 style="font-size: 2.2rem; margin-bottom: 1rem;">Контакты</h2>
@@ -123,6 +179,14 @@
     </section>
 </div>
 
+<!-- Лайтбокс -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-close" id="lightboxClose">×</div>
+    <div class="lightbox-prev" id="lightboxPrev">←</div>
+    <div class="lightbox-next" id="lightboxNext">→</div>
+    <div class="lightbox-content" id="lightboxContent"></div>
+</div>
+
 <script>
     // Бургер-меню
     const burger = document.getElementById('burger');
@@ -133,7 +197,6 @@
         burger.classList.toggle('active');
     });
 
-    // Закрывать меню после клика по ссылке (мобильная навигация)
     document.querySelectorAll('.nav-links a').forEach(link => {
         if (link.id !== 'themeToggle') {
             link.addEventListener('click', () => {
@@ -183,6 +246,308 @@
         sections[0].style.opacity = '1';
         sections[0].style.transform = 'translateY(0)';
     }, 100);
+
+    // ===== ОТЗЫВЫ =====
+    let selectedRating = 0;
+    const stars = document.querySelectorAll('.star-rating');
+    const ratingInput = document.getElementById('ratingInput');
+    const reviewName = document.getElementById('reviewName');
+    const reviewText = document.getElementById('reviewText');
+    const submitReview = document.getElementById('submitReview');
+    const reviewsList = document.getElementById('reviewsList');
+
+    // Загрузка отзывов из localStorage
+    function loadReviews() {
+        const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
+        reviewsList.innerHTML = '';
+        reviews.reverse().forEach(review => {
+            const card = document.createElement('div');
+            card.className = 'review-card';
+            card.innerHTML = `
+                <div class="review-header">
+                    <span class="review-name">${escapeHtml(review.name)}</span>
+                    <span class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
+                </div>
+                <div class="review-date">${review.date}</div>
+                <div class="review-text">${escapeHtml(review.text)}</div>
+            `;
+            reviewsList.appendChild(card);
+        });
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            selectedRating = parseInt(star.dataset.rating);
+            updateStars();
+        });
+        star.addEventListener('mouseenter', () => {
+            const rating = parseInt(star.dataset.rating);
+            stars.forEach((s, i) => {
+                s.textContent = i < rating ? '★' : '☆';
+                s.style.color = i < rating ? '#E4B363' : '#ccc';
+            });
+        });
+    });
+
+    ratingInput.addEventListener('mouseleave', updateStars);
+
+    function updateStars() {
+        stars.forEach((s, i) => {
+            s.textContent = i < selectedRating ? '★' : '☆';
+            s.style.color = i < selectedRating ? '#E4B363' : '#ccc';
+        });
+    }
+
+    submitReview.addEventListener('click', () => {
+        const name = reviewName.value.trim();
+        const text = reviewText.value.trim();
+        
+        if (!name) {
+            alert('Пожалуйста, введите ваше имя');
+            return;
+        }
+        if (selectedRating === 0) {
+            alert('Пожалуйста, поставьте оценку');
+            return;
+        }
+        if (!text) {
+            alert('Пожалуйста, напишите отзыв');
+            return;
+        }
+
+        const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
+        const newReview = {
+            name: name,
+            rating: selectedRating,
+            text: text,
+            date: new Date().toLocaleDateString('ru-RU')
+        };
+        reviews.push(newReview);
+        localStorage.setItem('reviews', JSON.stringify(reviews));
+
+        reviewName.value = '';
+        reviewText.value = '';
+        selectedRating = 0;
+        updateStars();
+        loadReviews();
+    });
+
+    loadReviews();
+
+    // ===== ГАЛЕРЕЯ =====
+    const ADMIN_PASSWORD = 'google404@';
+    let isAdmin = false;
+    let galleryItems = JSON.parse(localStorage.getItem('gallery') || '[]');
+    let selectedFiles = [];
+    let currentLightboxIndex = 0;
+
+    const adminPanel = document.getElementById('adminPanel');
+    const showAdminBtn = document.getElementById('showAdminBtn');
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    const adminPassword = document.getElementById('adminPassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const adminUploadArea = document.getElementById('adminUploadArea');
+    const mediaUpload = document.getElementById('mediaUpload');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const previewContainer = document.getElementById('previewContainer');
+    const galleryGrid = document.getElementById('galleryGrid');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = document.getElementById('lightboxContent');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+
+    showAdminBtn.addEventListener('click', () => {
+        adminPanel.classList.toggle('hidden');
+    });
+
+    loginBtn.addEventListener('click', () => {
+        if (adminPassword.value === ADMIN_PASSWORD) {
+            isAdmin = true;
+            adminLoginForm.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+            adminUploadArea.classList.remove('hidden');
+            adminPassword.value = '';
+            renderGallery();
+        } else {
+            alert('Неверный пароль');
+        }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+        isAdmin = false;
+        adminLoginForm.style.display = 'flex';
+        logoutBtn.style.display = 'none';
+        adminUploadArea.classList.add('hidden');
+        renderGallery();
+    });
+
+    mediaUpload.addEventListener('change', (e) => {
+        selectedFiles = Array.from(e.target.files);
+        renderPreview();
+    });
+
+    function renderPreview() {
+        previewContainer.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const isVideo = file.type.startsWith('video/');
+            const url = URL.createObjectURL(file);
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.innerHTML = `
+                ${isVideo ? `<video src="${url}"></video>` : `<img src="${url}" alt="preview">`}
+                <button class="remove-preview" data-index="${index}">×</button>
+            `;
+            previewContainer.appendChild(previewItem);
+        });
+
+        document.querySelectorAll('.remove-preview').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                selectedFiles.splice(index, 1);
+                renderPreview();
+                updateFileInput();
+            });
+        });
+    }
+
+    function updateFileInput() {
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        mediaUpload.files = dt.files;
+    }
+
+    uploadBtn.addEventListener('click', () => {
+        if (!isAdmin) {
+            alert('Требуется авторизация');
+            return;
+        }
+        if (selectedFiles.length === 0) {
+            alert('Выберите файлы для загрузки');
+            return;
+        }
+
+        selectedFiles.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const isVideo = file.type.startsWith('video/');
+                galleryItems.push({
+                    type: isVideo ? 'video' : 'image',
+                    url: e.target.result,
+                    name: file.name,
+                    date: new Date().toISOString()
+                });
+                if (galleryItems.length === selectedFiles.length) {
+                    saveGallery();
+                    selectedFiles = [];
+                    mediaUpload.value = '';
+                    previewContainer.innerHTML = '';
+                    renderGallery();
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function saveGallery() {
+        localStorage.setItem('gallery', JSON.stringify(galleryItems));
+    }
+
+    function renderGallery() {
+        galleryGrid.innerHTML = '';
+        galleryItems.forEach((item, index) => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.setAttribute('data-type', item.type);
+            galleryItem.innerHTML = item.type === 'video' 
+                ? `<video src="${item.url}" preload="metadata"></video>` 
+                : `<img src="${item.url}" alt="gallery image" loading="lazy">`;
+            
+            if (isAdmin) {
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-media-btn';
+                deleteBtn.textContent = 'Удалить';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    galleryItems.splice(index, 1);
+                    saveGallery();
+                    renderGallery();
+                };
+                galleryItem.appendChild(deleteBtn);
+            }
+
+            galleryItem.addEventListener('click', () => {
+                openLightbox(index);
+            });
+            galleryGrid.appendChild(galleryItem);
+        });
+    }
+
+    function openLightbox(index) {
+        currentLightboxIndex = index;
+        updateLightboxContent();
+        lightbox.classList.add('active');
+    }
+
+    function updateLightboxContent() {
+        const item = galleryItems[currentLightboxIndex];
+        lightboxContent.innerHTML = item.type === 'video'
+            ? `<video src="${item.url}" controls autoplay></video>`
+            : `<img src="${item.url}" alt="lightbox image">`;
+    }
+
+    lightboxClose.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+        lightboxContent.innerHTML = '';
+    });
+
+    lightboxPrev.addEventListener('click', () => {
+        if (currentLightboxIndex > 0) {
+            currentLightboxIndex--;
+            updateLightboxContent();
+        }
+    });
+
+    lightboxNext.addEventListener('click', () => {
+        if (currentLightboxIndex < galleryItems.length - 1) {
+            currentLightboxIndex++;
+            updateLightboxContent();
+        }
+    });
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            lightbox.classList.remove('active');
+            lightboxContent.innerHTML = '';
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') {
+            lightbox.classList.remove('active');
+            lightboxContent.innerHTML = '';
+        } else if (e.key === 'ArrowLeft') {
+            if (currentLightboxIndex > 0) {
+                currentLightboxIndex--;
+                updateLightboxContent();
+            }
+        } else if (e.key === 'ArrowRight') {
+            if (currentLightboxIndex < galleryItems.length - 1) {
+                currentLightboxIndex++;
+                updateLightboxContent();
+            }
+        }
+    });
+
+    renderGallery();
 </script>
 </body>
-</html>
+    </html>
