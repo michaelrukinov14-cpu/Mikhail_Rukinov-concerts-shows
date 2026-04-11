@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -44,34 +44,30 @@
             <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Афиша концертов</h2>
             <p style="margin-bottom: 2rem; color: #5A5A62;">Выберите дату и город</p>
             <div class="cards-grid">
-                <div class="concert-card" data-bg="https://drive.google.com/file/d/1NqHQCZ2s9jXVpFyjVs-FlY0ZE-7fUaK5/view?usp=drivesdk">
+                <div class="concert-card">
                     <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ЧТ, 30 АПРЕЛЯ 2026, 19:00</div>
-                    <div class="concert-title">Орск</div>
                     <div class="concert-venue">ДК «Нефтехимиков»<br>Пр-кт Ленина, 41</div>
                     <div class="price">от 500 ₽</div>
                     <a href="https://iframeab-pre11382.intickets.ru/seance/71257041/" class="btn-small ticket-link">Купить билет</a>
                 </div>
-                <div class="concert-card" data-bg="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
+                <div class="concert-card">
                     <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ПН, 18 МАЯ 2026, 19:00</div>
-                    <div class="concert-title">Казань</div>
                     <div class="concert-venue">ДК «Железнодорожников»</div>
                     <div class="price">от 1 000 ₽</div>
                     <a href="https://kzn.kassir.ru/koncert/abba-volshebnaya-koroleva#3488053" class="btn-small ticket-link">Купить билет</a>
                 </div>
-                <div class="concert-card" data-bg="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
+                <div class="concert-card">
                     <h2 class="concert-title">Жемчужины рока</h2>
                     <div class="concert-date">ЧТ, 12 НОЯБРЯ 2026, 19:00</div>
-                    <div class="concert-title">Оренбург</div>
                     <div class="concert-venue">ДК и С «Газовик»<br>Ул. Чкалова, 1</div>
                     <div class="price">от 500 ₽</div>
                     <a href="https://orenburg.kassir.ru/koncert/dkis-gazovik/mihail-rukinov-jemchujinyi-roka_2026-04-28" class="btn-small ticket-link">Купить билет</a>
                 </div>
-                <div class="concert-card" data-bg="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80">
+                <div class="concert-card">
                     <h2 class="concert-title">ABBA Волшебная королева</h2>
                     <div class="concert-date">ЧТ, 19 МАЯ 2026, 19:00</div>
-                    <div class="concert-title">Йошкар-Ола</div>
                     <div class="concert-venue">ДК им. «В.И. Ленина»</div>
                     <div class="price">от 1 000 ₽</div>
                     <a href="https://yola.kassir.ru/koncert/abba-volshebnaya-koroleva-1" class="btn-small ticket-link">Купить билет</a>
@@ -134,7 +130,7 @@
             <h2 style="font-size: 2.2rem; margin-bottom: 1rem;">Галерея</h2>
             <p style="margin-bottom: 1rem;">Фото и видео с концертов</p>
             
-            <!-- Панель администратора (изначально скрыта) -->
+            <!-- Панель администратора -->
             <div class="admin-panel hidden" id="adminPanel">
                 <div class="admin-login" id="adminLoginForm">
                     <input type="password" id="adminPassword" placeholder="Введите пароль" autocomplete="off">
@@ -146,6 +142,11 @@
                         <label class="file-label" for="mediaUpload">📸 Выбрать файлы</label>
                         <input type="file" id="mediaUpload" accept="image/*,video/*" multiple>
                         <button class="btn-small" id="uploadBtn">Загрузить</button>
+                    </div>
+                    <div class="export-controls">
+                        <button class="btn-small" id="exportDataBtn">📤 Экспорт данных</button>
+                        <label class="btn-small" for="importDataInput" style="cursor:pointer;">📥 Импорт данных</label>
+                        <input type="file" id="importDataInput" accept=".json" style="display:none;">
                     </div>
                     <div class="preview-container" id="previewContainer"></div>
                 </div>
@@ -188,6 +189,7 @@
 </div>
 
 <script>
+    // ===== БАЗОВЫЕ ФУНКЦИИ =====
     // Бургер-меню
     const burger = document.getElementById('burger');
     const navLinks = document.getElementById('navLinks');
@@ -247,6 +249,22 @@
         sections[0].style.transform = 'translateY(0)';
     }, 100);
 
+    // Функция экранирования HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ===== АДМИНИСТРАТИВНЫЕ ФУНКЦИИ =====
+    const ADMIN_PASSWORD = 'google404@';
+    let isAdmin = false;
+
+    // Проверка пароля
+    function checkPassword(password) {
+        return password === ADMIN_PASSWORD;
+    }
+
     // ===== ОТЗЫВЫ =====
     let selectedRating = 0;
     const stars = document.querySelectorAll('.star-rating');
@@ -256,11 +274,12 @@
     const submitReview = document.getElementById('submitReview');
     const reviewsList = document.getElementById('reviewsList');
 
-    // Загрузка отзывов из localStorage
+    // Загрузка отзывов
     function loadReviews() {
         const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
         reviewsList.innerHTML = '';
-        reviews.reverse().forEach(review => {
+        reviews.reverse().forEach((review, index) => {
+            const originalIndex = reviews.length - 1 - index;
             const card = document.createElement('div');
             card.className = 'review-card';
             card.innerHTML = `
@@ -271,14 +290,25 @@
                 <div class="review-date">${review.date}</div>
                 <div class="review-text">${escapeHtml(review.text)}</div>
             `;
+            
+            if (isAdmin) {
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-review-btn';
+                deleteBtn.textContent = 'Удалить';
+                deleteBtn.onclick = () => deleteReview(originalIndex);
+                card.appendChild(deleteBtn);
+            }
+            
             reviewsList.appendChild(card);
         });
     }
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+    function deleteReview(index) {
+        if (!isAdmin) return;
+        const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
+        reviews.splice(index, 1);
+        localStorage.setItem('reviews', JSON.stringify(reviews));
+        loadReviews();
     }
 
     stars.forEach(star => {
@@ -338,11 +368,7 @@
         loadReviews();
     });
 
-    loadReviews();
-
     // ===== ГАЛЕРЕЯ =====
-    const ADMIN_PASSWORD = 'google404@';
-    let isAdmin = false;
     let galleryItems = JSON.parse(localStorage.getItem('gallery') || '[]');
     let selectedFiles = [];
     let currentLightboxIndex = 0;
@@ -363,18 +389,24 @@
     const lightboxClose = document.getElementById('lightboxClose');
     const lightboxPrev = document.getElementById('lightboxPrev');
     const lightboxNext = document.getElementById('lightboxNext');
+    const exportDataBtn = document.getElementById('exportDataBtn');
+    const importDataInput = document.getElementById('importDataInput');
+
+    // Реакции
+    const REACTIONS = ['❤️', '👍', '👎', '🌹', '🎉'];
 
     showAdminBtn.addEventListener('click', () => {
         adminPanel.classList.toggle('hidden');
     });
 
     loginBtn.addEventListener('click', () => {
-        if (adminPassword.value === ADMIN_PASSWORD) {
+        if (checkPassword(adminPassword.value)) {
             isAdmin = true;
             adminLoginForm.style.display = 'none';
             logoutBtn.style.display = 'inline-block';
             adminUploadArea.classList.remove('hidden');
             adminPassword.value = '';
+            loadReviews();
             renderGallery();
         } else {
             alert('Неверный пароль');
@@ -386,6 +418,7 @@
         adminLoginForm.style.display = 'flex';
         logoutBtn.style.display = 'none';
         adminUploadArea.classList.add('hidden');
+        loadReviews();
         renderGallery();
     });
 
@@ -401,10 +434,25 @@
             const url = URL.createObjectURL(file);
             const previewItem = document.createElement('div');
             previewItem.className = 'preview-item';
-            previewItem.innerHTML = `
-                ${isVideo ? `<video src="${url}"></video>` : `<img src="${url}" alt="preview">`}
-                <button class="remove-preview" data-index="${index}">×</button>
-            `;
+            
+            if (isVideo) {
+                const video = document.createElement('video');
+                video.src = url;
+                video.preload = 'metadata';
+                previewItem.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'preview';
+                previewItem.appendChild(img);
+            }
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-preview';
+            removeBtn.textContent = '×';
+            removeBtn.dataset.index = index;
+            previewItem.appendChild(removeBtn);
+            
             previewContainer.appendChild(previewItem);
         });
 
@@ -434,17 +482,28 @@
             return;
         }
 
+        let processed = 0;
         selectedFiles.forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const isVideo = file.type.startsWith('video/');
                 galleryItems.push({
+                    id: Date.now() + Math.random(),
                     type: isVideo ? 'video' : 'image',
                     url: e.target.result,
                     name: file.name,
-                    date: new Date().toISOString()
+                    date: new Date().toISOString(),
+                    reactions: {
+                        '❤️': [],
+                        '👍': [],
+                        '👎': [],
+                        '🌹': [],
+                        '🎉': []
+                    }
                 });
-                if (galleryItems.length === selectedFiles.length) {
+                
+                processed++;
+                if (processed === selectedFiles.length) {
                     saveGallery();
                     selectedFiles = [];
                     mediaUpload.value = '';
@@ -460,15 +519,68 @@
         localStorage.setItem('gallery', JSON.stringify(galleryItems));
     }
 
+    function addReaction(itemId, reaction) {
+        const item = galleryItems.find(i => i.id === itemId);
+        if (!item) return;
+        
+        const userIdentifier = 'user_' + (localStorage.getItem('userReactionId') || 
+            (() => { const id = Date.now() + Math.random(); localStorage.setItem('userReactionId', id); return id; })());
+        
+        // Проверяем, ставил ли уже пользователь эту реакцию
+        const hasReacted = item.reactions[reaction].includes(userIdentifier);
+        
+        if (hasReacted) {
+            // Убираем реакцию
+            item.reactions[reaction] = item.reactions[reaction].filter(id => id !== userIdentifier);
+        } else {
+            // Убираем все другие реакции пользователя с этого медиа
+            REACTIONS.forEach(r => {
+                item.reactions[r] = item.reactions[r].filter(id => id !== userIdentifier);
+            });
+            // Добавляем новую реакцию
+            item.reactions[reaction].push(userIdentifier);
+        }
+        
+        saveGallery();
+        renderGallery();
+    }
+
     function renderGallery() {
         galleryGrid.innerHTML = '';
         galleryItems.forEach((item, index) => {
             const galleryItem = document.createElement('div');
             galleryItem.className = 'gallery-item';
             galleryItem.setAttribute('data-type', item.type);
-            galleryItem.innerHTML = item.type === 'video' 
-                ? `<video src="${item.url}" preload="metadata"></video>` 
-                : `<img src="${item.url}" alt="gallery image" loading="lazy">`;
+            
+            if (item.type === 'video') {
+                const video = document.createElement('video');
+                video.src = item.url;
+                video.preload = 'metadata';
+                galleryItem.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = item.url;
+                img.alt = 'gallery image';
+                img.loading = 'lazy';
+                galleryItem.appendChild(img);
+            }
+            
+            // Панель реакций
+            const reactionsDiv = document.createElement('div');
+            reactionsDiv.className = 'gallery-reactions';
+            
+            REACTIONS.forEach(reaction => {
+                const btn = document.createElement('button');
+                btn.className = 'reaction-btn';
+                btn.innerHTML = `${reaction} <span class="reaction-count">${item.reactions[reaction].length}</span>`;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    addReaction(item.id, reaction);
+                };
+                reactionsDiv.appendChild(btn);
+            });
+            
+            galleryItem.appendChild(reactionsDiv);
             
             if (isAdmin) {
                 const deleteBtn = document.createElement('button');
@@ -483,9 +595,12 @@
                 galleryItem.appendChild(deleteBtn);
             }
 
-            galleryItem.addEventListener('click', () => {
-                openLightbox(index);
+            galleryItem.addEventListener('click', (e) => {
+                if (!e.target.closest('.gallery-reactions') && !e.target.closest('.delete-media-btn')) {
+                    openLightbox(index);
+                }
             });
+            
             galleryGrid.appendChild(galleryItem);
         });
     }
@@ -547,6 +662,64 @@
         }
     });
 
+    // Экспорт/Импорт данных
+    exportDataBtn.addEventListener('click', () => {
+        if (!isAdmin) {
+            alert('Требуется авторизация');
+            return;
+        }
+        
+        const data = {
+            reviews: JSON.parse(localStorage.getItem('reviews') || '[]'),
+            gallery: galleryItems,
+            exportDate: new Date().toISOString()
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rukinov_backup_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    importDataInput.addEventListener('change', (e) => {
+        if (!isAdmin) {
+            alert('Требуется авторизация');
+            return;
+        }
+        
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = JSON.parse(event.target.result);
+                
+                if (data.reviews) {
+                    localStorage.setItem('reviews', JSON.stringify(data.reviews));
+                }
+                if (data.gallery) {
+                    galleryItems = data.gallery;
+                    saveGallery();
+                }
+                
+                loadReviews();
+                renderGallery();
+                alert('Данные успешно импортированы!');
+            } catch (error) {
+                alert('Ошибка при импорте данных: неверный формат файла');
+            }
+            
+            importDataInput.value = '';
+        };
+        reader.readAsText(file);
+    });
+
+    // Инициализация
+    loadReviews();
     renderGallery();
 </script>
 </body>
