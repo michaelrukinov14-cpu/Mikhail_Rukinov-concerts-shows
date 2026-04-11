@@ -1,8 +1,8 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=yes">
     <title>Михаил Рукинов | Концерты и шоу</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,9 +21,9 @@
             <li><a href="#reviews">Отзывы</a></li>
             <li><a href="#gallery" class="gallery-link">Галерея</a></li>
             <li><a href="#contact">Контакты</a></li>
-            <li><button class="theme-toggle" id="themeToggle">🌙</button></li>
+            <li><button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button></li>
         </ul>
-        <div class="burger" id="burger">
+        <div class="burger" id="burger" aria-label="Меню" role="button" tabindex="0">
             <span></span><span></span><span></span>
         </div>
     </nav>
@@ -99,27 +99,29 @@
             <div class="reviews-container">
                 <div class="review-form">
                     <div class="form-group">
-                        <label>Ваше имя</label>
+                        <label for="reviewName">Ваше имя</label>
                         <input type="text" id="reviewName" placeholder="Введите ваше имя" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label>Оценка</label>
                         <div class="rating-input" id="ratingInput">
-                            <span class="star-rating" data-rating="1">☆</span>
-                            <span class="star-rating" data-rating="2">☆</span>
-                            <span class="star-rating" data-rating="3">☆</span>
-                            <span class="star-rating" data-rating="4">☆</span>
-                            <span class="star-rating" data-rating="5">☆</span>
+                            <span class="star-rating" data-rating="1" role="button" tabindex="0" aria-label="1 звезда">☆</span>
+                            <span class="star-rating" data-rating="2" role="button" tabindex="0" aria-label="2 звезды">☆</span>
+                            <span class="star-rating" data-rating="3" role="button" tabindex="0" aria-label="3 звезды">☆</span>
+                            <span class="star-rating" data-rating="4" role="button" tabindex="0" aria-label="4 звезды">☆</span>
+                            <span class="star-rating" data-rating="5" role="button" tabindex="0" aria-label="5 звёзд">☆</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Ваш отзыв</label>
+                        <label for="reviewText">Ваш отзыв</label>
                         <textarea id="reviewText" rows="4" placeholder="Поделитесь впечатлениями..."></textarea>
                     </div>
                     <button class="btn" id="submitReview">Оставить отзыв</button>
                 </div>
                 
-                <div class="reviews-list" id="reviewsList"></div>
+                <div class="reviews-list" id="reviewsList">
+                    <div class="loading-indicator">Загрузка отзывов...</div>
+                </div>
             </div>
         </div>
     </section>
@@ -133,7 +135,7 @@
             <!-- Панель администратора -->
             <div class="admin-panel hidden" id="adminPanel">
                 <div class="admin-login" id="adminLoginForm">
-                    <input type="password" id="adminPassword" placeholder="Введите пароль" autocomplete="off">
+                    <input type="password" id="adminPassword" placeholder="Введите пароль" autocomplete="off" aria-label="Пароль администратора">
                     <button class="btn-small" id="loginBtn">Войти</button>
                     <button class="btn-small" id="logoutBtn" style="display:none;">Выйти</button>
                 </div>
@@ -154,7 +156,9 @@
             
             <button class="btn-small" id="showAdminBtn" style="margin-bottom: 1.5rem;">🔐 Админ</button>
             
-            <div class="gallery-grid" id="galleryGrid"></div>
+            <div class="gallery-grid" id="galleryGrid">
+                <div class="loading-indicator">Загрузка галереи...</div>
+            </div>
         </div>
     </section>
 
@@ -165,8 +169,8 @@
             <p style="margin-bottom: 2rem;">Следите за новостями и анонсами</p>
             <div class="contacts-flex">
                 <div class="social-links">
-                    <a href="https://vk.ru/id140481392" target="_blank">VK</a>
-                    <a href="https://t.me/Michaelrukinov" target="_blank">Telegram</a>
+                    <a href="https://vk.ru/id140481392" target="_blank" rel="noopener">VK</a>
+                    <a href="https://t.me/Michaelrukinov" target="_blank" rel="noopener">Telegram</a>
                 </div>
                 <div>
                     <p><strong>Телефон:</strong> <a href="tel:+79916814230" style="color:#8B5E2C; text-decoration:none;">+7-991-681-42-30</a></p>
@@ -182,545 +186,936 @@
 
 <!-- Лайтбокс -->
 <div class="lightbox" id="lightbox">
-    <div class="lightbox-close" id="lightboxClose">×</div>
-    <div class="lightbox-prev" id="lightboxPrev">←</div>
-    <div class="lightbox-next" id="lightboxNext">→</div>
+    <div class="lightbox-close" id="lightboxClose" role="button" tabindex="0" aria-label="Закрыть">×</div>
+    <div class="lightbox-prev" id="lightboxPrev" role="button" tabindex="0" aria-label="Предыдущее">←</div>
+    <div class="lightbox-next" id="lightboxNext" role="button" tabindex="0" aria-label="Следующее">→</div>
     <div class="lightbox-content" id="lightboxContent"></div>
 </div>
 
 <script>
-    // ===== БАЗОВЫЕ ФУНКЦИИ =====
-    // Бургер-меню
-    const burger = document.getElementById('burger');
-    const navLinks = document.getElementById('navLinks');
-    
-    burger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        burger.classList.toggle('active');
-    });
+    (function() {
+        'use strict';
 
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        if (link.id !== 'themeToggle') {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                burger.classList.remove('active');
+        // ===== БАЗА ДАННЫХ INDEXEDDB =====
+        const DB_NAME = 'RukinovDB';
+        const DB_VERSION = 2;
+        let db = null;
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    
+                    // Хранилище отзывов
+                    if (!db.objectStoreNames.contains('reviews')) {
+                        const reviewsStore = db.createObjectStore('reviews', { keyPath: 'id', autoIncrement: true });
+                        reviewsStore.createIndex('date', 'date', { unique: false });
+                    }
+                    
+                    // Хранилище галереи
+                    if (!db.objectStoreNames.contains('gallery')) {
+                        const galleryStore = db.createObjectStore('gallery', { keyPath: 'id' });
+                        galleryStore.createIndex('date', 'date', { unique: false });
+                    }
+                    
+                    // Хранилище реакций
+                    if (!db.objectStoreNames.contains('reactions')) {
+                        const reactionsStore = db.createObjectStore('reactions', { keyPath: 'id', autoIncrement: true });
+                        reactionsStore.createIndex('mediaId', 'mediaId', { unique: false });
+                        reactionsStore.createIndex('userToken', 'userToken', { unique: false });
+                    }
+                    
+                    // Хранилище настроек
+                    if (!db.objectStoreNames.contains('settings')) {
+                        db.createObjectStore('settings', { keyPath: 'key' });
+                    }
+                };
             });
         }
-    });
 
-    // Переключение темы
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
-    
-    function setTheme(theme) {
-        body.classList.remove('light', 'dark');
-        body.classList.add(theme);
-        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
-        localStorage.setItem('theme', theme);
-    }
-    
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    
-    themeToggle.addEventListener('click', () => {
-        const newTheme = body.classList.contains('light') ? 'dark' : 'light';
-        setTheme(newTheme);
-    });
-
-    // Плавное появление секций
-    const sections = document.querySelectorAll('.section');
-    const observerOptions = { threshold: 0.2 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+        // Генерация уникального токена пользователя
+        function getUserToken() {
+            let token = localStorage.getItem('userToken');
+            if (!token) {
+                token = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('userToken', token);
             }
-        });
-    }, observerOptions);
-    sections.forEach(section => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(12px)';
-        section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(section);
-    });
-    setTimeout(() => {
-        sections[0].style.opacity = '1';
-        sections[0].style.transform = 'translateY(0)';
-    }, 100);
+            return token;
+        }
 
-    // Функция экранирования HTML
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+        const userToken = getUserToken();
 
-    // ===== АДМИНИСТРАТИВНЫЕ ФУНКЦИИ =====
-    const ADMIN_PASSWORD = 'google404@';
-    let isAdmin = false;
-
-    // Проверка пароля
-    function checkPassword(password) {
-        return password === ADMIN_PASSWORD;
-    }
-
-    // ===== ОТЗЫВЫ =====
-    let selectedRating = 0;
-    const stars = document.querySelectorAll('.star-rating');
-    const ratingInput = document.getElementById('ratingInput');
-    const reviewName = document.getElementById('reviewName');
-    const reviewText = document.getElementById('reviewText');
-    const submitReview = document.getElementById('submitReview');
-    const reviewsList = document.getElementById('reviewsList');
-
-    // Загрузка отзывов
-    function loadReviews() {
-        const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-        reviewsList.innerHTML = '';
-        reviews.reverse().forEach((review, index) => {
-            const originalIndex = reviews.length - 1 - index;
-            const card = document.createElement('div');
-            card.className = 'review-card';
-            card.innerHTML = `
-                <div class="review-header">
-                    <span class="review-name">${escapeHtml(review.name)}</span>
-                    <span class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
-                </div>
-                <div class="review-date">${review.date}</div>
-                <div class="review-text">${escapeHtml(review.text)}</div>
-            `;
-            
-            if (isAdmin) {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-review-btn';
-                deleteBtn.textContent = 'Удалить';
-                deleteBtn.onclick = () => deleteReview(originalIndex);
-                card.appendChild(deleteBtn);
-            }
-            
-            reviewsList.appendChild(card);
-        });
-    }
-
-    function deleteReview(index) {
-        if (!isAdmin) return;
-        const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-        reviews.splice(index, 1);
-        localStorage.setItem('reviews', JSON.stringify(reviews));
-        loadReviews();
-    }
-
-    stars.forEach(star => {
-        star.addEventListener('click', () => {
-            selectedRating = parseInt(star.dataset.rating);
-            updateStars();
-        });
-        star.addEventListener('mouseenter', () => {
-            const rating = parseInt(star.dataset.rating);
-            stars.forEach((s, i) => {
-                s.textContent = i < rating ? '★' : '☆';
-                s.style.color = i < rating ? '#E4B363' : '#ccc';
-            });
-        });
-    });
-
-    ratingInput.addEventListener('mouseleave', updateStars);
-
-    function updateStars() {
-        stars.forEach((s, i) => {
-            s.textContent = i < selectedRating ? '★' : '☆';
-            s.style.color = i < selectedRating ? '#E4B363' : '#ccc';
-        });
-    }
-
-    submitReview.addEventListener('click', () => {
-        const name = reviewName.value.trim();
-        const text = reviewText.value.trim();
+        // ===== БАЗОВЫЕ ФУНКЦИИ =====
+        // Бургер-меню
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
         
-        if (!name) {
-            alert('Пожалуйста, введите ваше имя');
-            return;
+        if (burger) {
+            burger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                burger.classList.toggle('active');
+            });
+            burger.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    navLinks.classList.toggle('active');
+                    burger.classList.toggle('active');
+                }
+            });
         }
-        if (selectedRating === 0) {
-            alert('Пожалуйста, поставьте оценку');
-            return;
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.id !== 'themeToggle') {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    burger.classList.remove('active');
+                });
+            }
+        });
+
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        function setTheme(theme) {
+            body.classList.remove('light', 'dark');
+            body.classList.add(theme);
+            if (themeToggle) {
+                themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+            }
+            localStorage.setItem('theme', theme);
         }
-        if (!text) {
-            alert('Пожалуйста, напишите отзыв');
-            return;
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+                setTheme(newTheme);
+            });
         }
 
-        const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-        const newReview = {
-            name: name,
-            rating: selectedRating,
-            text: text,
-            date: new Date().toLocaleDateString('ru-RU')
-        };
-        reviews.push(newReview);
-        localStorage.setItem('reviews', JSON.stringify(reviews));
+        // Плавное появление секций
+        const sections = document.querySelectorAll('.section');
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(12px)';
+            section.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            observer.observe(section);
+        });
+        
+        setTimeout(() => {
+            if (sections[0]) {
+                sections[0].style.opacity = '1';
+                sections[0].style.transform = 'translateY(0)';
+            }
+        }, 100);
 
-        reviewName.value = '';
-        reviewText.value = '';
-        selectedRating = 0;
-        updateStars();
-        loadReviews();
-    });
-
-    // ===== ГАЛЕРЕЯ =====
-    let galleryItems = JSON.parse(localStorage.getItem('gallery') || '[]');
-    let selectedFiles = [];
-    let currentLightboxIndex = 0;
-
-    const adminPanel = document.getElementById('adminPanel');
-    const showAdminBtn = document.getElementById('showAdminBtn');
-    const adminLoginForm = document.getElementById('adminLoginForm');
-    const adminPassword = document.getElementById('adminPassword');
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const adminUploadArea = document.getElementById('adminUploadArea');
-    const mediaUpload = document.getElementById('mediaUpload');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const previewContainer = document.getElementById('previewContainer');
-    const galleryGrid = document.getElementById('galleryGrid');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxContent = document.getElementById('lightboxContent');
-    const lightboxClose = document.getElementById('lightboxClose');
-    const lightboxPrev = document.getElementById('lightboxPrev');
-    const lightboxNext = document.getElementById('lightboxNext');
-    const exportDataBtn = document.getElementById('exportDataBtn');
-    const importDataInput = document.getElementById('importDataInput');
-
-    // Реакции
-    const REACTIONS = ['❤️', '👍', '👎', '🌹', '🎉'];
-
-    showAdminBtn.addEventListener('click', () => {
-        adminPanel.classList.toggle('hidden');
-    });
-
-    loginBtn.addEventListener('click', () => {
-        if (checkPassword(adminPassword.value)) {
-            isAdmin = true;
-            adminLoginForm.style.display = 'none';
-            logoutBtn.style.display = 'inline-block';
-            adminUploadArea.classList.remove('hidden');
-            adminPassword.value = '';
-            loadReviews();
-            renderGallery();
-        } else {
-            alert('Неверный пароль');
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
-    });
 
-    logoutBtn.addEventListener('click', () => {
-        isAdmin = false;
-        adminLoginForm.style.display = 'flex';
-        logoutBtn.style.display = 'none';
-        adminUploadArea.classList.add('hidden');
-        loadReviews();
-        renderGallery();
-    });
+        // ===== АДМИНИСТРАТИВНЫЕ ФУНКЦИИ =====
+        const ADMIN_PASSWORD = 'google404@';
+        let isAdmin = false;
 
-    mediaUpload.addEventListener('change', (e) => {
-        selectedFiles = Array.from(e.target.files);
-        renderPreview();
-    });
+        function checkPassword(password) {
+            return password === ADMIN_PASSWORD;
+        }
 
-    function renderPreview() {
-        previewContainer.innerHTML = '';
-        selectedFiles.forEach((file, index) => {
-            const isVideo = file.type.startsWith('video/');
-            const url = URL.createObjectURL(file);
-            const previewItem = document.createElement('div');
-            previewItem.className = 'preview-item';
+        // ===== ОТЗЫВЫ (IndexedDB) =====
+        let selectedRating = 0;
+        const stars = document.querySelectorAll('.star-rating');
+        const ratingInput = document.getElementById('ratingInput');
+        const reviewName = document.getElementById('reviewName');
+        const reviewText = document.getElementById('reviewText');
+        const submitReview = document.getElementById('submitReview');
+        const reviewsList = document.getElementById('reviewsList');
+
+        async function loadReviews() {
+            if (!reviewsList) return;
             
-            if (isVideo) {
-                const video = document.createElement('video');
-                video.src = url;
-                video.preload = 'metadata';
-                previewItem.appendChild(video);
-            } else {
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'preview';
-                previewItem.appendChild(img);
+            try {
+                await openDB();
+                const transaction = db.transaction(['reviews'], 'readonly');
+                const store = transaction.objectStore('reviews');
+                const index = store.index('date');
+                const reviews = [];
+                
+                await new Promise((resolve, reject) => {
+                    const request = index.openCursor(null, 'prev');
+                    request.onsuccess = (e) => {
+                        const cursor = e.target.result;
+                        if (cursor) {
+                            reviews.push(cursor.value);
+                            cursor.continue();
+                        } else {
+                            resolve();
+                        }
+                    };
+                    request.onerror = () => reject(request.error);
+                });
+                
+                reviewsList.innerHTML = '';
+                
+                if (reviews.length === 0) {
+                    reviewsList.innerHTML = '<p style="text-align:center; opacity:0.7;">Пока нет отзывов. Будьте первым!</p>';
+                    return;
+                }
+                
+                reviews.forEach((review) => {
+                    const card = document.createElement('div');
+                    card.className = 'review-card';
+                    card.innerHTML = `
+                        <div class="review-header">
+                            <span class="review-name">${escapeHtml(review.name)}</span>
+                            <span class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
+                        </div>
+                        <div class="review-date">${review.date}</div>
+                        <div class="review-text">${escapeHtml(review.text)}</div>
+                    `;
+                    
+                    if (isAdmin) {
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'delete-review-btn';
+                        deleteBtn.textContent = 'Удалить';
+                        deleteBtn.setAttribute('aria-label', 'Удалить отзыв');
+                        deleteBtn.onclick = () => deleteReview(review.id);
+                        card.appendChild(deleteBtn);
+                    }
+                    
+                    reviewsList.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки отзывов:', error);
+                reviewsList.innerHTML = '<p style="text-align:center; color:red;">Ошибка загрузки отзывов</p>';
+            }
+        }
+
+        async function deleteReview(id) {
+            if (!isAdmin) return;
+            
+            try {
+                await openDB();
+                const transaction = db.transaction(['reviews'], 'readwrite');
+                const store = transaction.objectStore('reviews');
+                store.delete(id);
+                await new Promise((resolve, reject) => {
+                    transaction.oncomplete = resolve;
+                    transaction.onerror = () => reject(transaction.error);
+                });
+                await loadReviews();
+            } catch (error) {
+                console.error('Ошибка удаления отзыва:', error);
+            }
+        }
+
+        if (stars.length > 0) {
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.dataset.rating);
+                    updateStars();
+                });
+                star.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectedRating = parseInt(star.dataset.rating);
+                        updateStars();
+                    }
+                });
+                star.addEventListener('mouseenter', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    stars.forEach((s, i) => {
+                        s.textContent = i < rating ? '★' : '☆';
+                        s.style.color = i < rating ? '#E4B363' : '#ccc';
+                    });
+                });
+            });
+
+            if (ratingInput) {
+                ratingInput.addEventListener('mouseleave', updateStars);
+            }
+        }
+
+        function updateStars() {
+            stars.forEach((s, i) => {
+                s.textContent = i < selectedRating ? '★' : '☆';
+                s.style.color = i < selectedRating ? '#E4B363' : '#ccc';
+            });
+        }
+
+        if (submitReview) {
+            submitReview.addEventListener('click', async () => {
+                const name = reviewName.value.trim();
+                const text = reviewText.value.trim();
+                
+                if (!name) {
+                    alert('Пожалуйста, введите ваше имя');
+                    return;
+                }
+                if (selectedRating === 0) {
+                    alert('Пожалуйста, поставьте оценку');
+                    return;
+                }
+                if (!text) {
+                    alert('Пожалуйста, напишите отзыв');
+                    return;
+                }
+
+                try {
+                    await openDB();
+                    const transaction = db.transaction(['reviews'], 'readwrite');
+                    const store = transaction.objectStore('reviews');
+                    
+                    const newReview = {
+                        name: name,
+                        rating: selectedRating,
+                        text: text,
+                        date: new Date().toLocaleDateString('ru-RU'),
+                        timestamp: Date.now()
+                    };
+                    
+                    store.add(newReview);
+                    
+                    await new Promise((resolve, reject) => {
+                        transaction.oncomplete = resolve;
+                        transaction.onerror = () => reject(transaction.error);
+                    });
+
+                    reviewName.value = '';
+                    reviewText.value = '';
+                    selectedRating = 0;
+                    updateStars();
+                    await loadReviews();
+                } catch (error) {
+                    console.error('Ошибка сохранения отзыва:', error);
+                    alert('Ошибка сохранения отзыва');
+                }
+            });
+        }
+
+        // ===== ГАЛЕРЕЯ (IndexedDB) =====
+        const REACTIONS = ['❤️', '👍', '👎', '🌹', '🎉'];
+        let galleryItems = [];
+        let selectedFiles = [];
+        let currentLightboxIndex = 0;
+
+        const adminPanel = document.getElementById('adminPanel');
+        const showAdminBtn = document.getElementById('showAdminBtn');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const adminPassword = document.getElementById('adminPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const adminUploadArea = document.getElementById('adminUploadArea');
+        const mediaUpload = document.getElementById('mediaUpload');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const previewContainer = document.getElementById('previewContainer');
+        const galleryGrid = document.getElementById('galleryGrid');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxContent = document.getElementById('lightboxContent');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataInput = document.getElementById('importDataInput');
+
+        async function loadGallery() {
+            if (!galleryGrid) return;
+            
+            try {
+                await openDB();
+                const transaction = db.transaction(['gallery', 'reactions'], 'readonly');
+                const galleryStore = transaction.objectStore('gallery');
+                const reactionsStore = transaction.objectStore('reactions');
+                
+                const items = [];
+                
+                await new Promise((resolve, reject) => {
+                    const request = galleryStore.getAll();
+                    request.onsuccess = () => {
+                        items.push(...request.result);
+                        resolve();
+                    };
+                    request.onerror = () => reject(request.error);
+                });
+                
+                // Загружаем реакции для каждого медиа
+                for (const item of items) {
+                    item.reactions = {};
+                    REACTIONS.forEach(r => item.reactions[r] = 0);
+                    
+                    const reactions = await new Promise((resolve, reject) => {
+                        const index = reactionsStore.index('mediaId');
+                        const request = index.getAll(item.id);
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    
+                    // Подсчитываем реакции
+                    reactions.forEach(r => {
+                        if (item.reactions[r.reaction] !== undefined) {
+                            item.reactions[r.reaction]++;
+                        }
+                    });
+                    
+                    // Проверяем, поставил ли пользователь реакцию
+                    item.userReaction = reactions.find(r => r.userToken === userToken)?.reaction || null;
+                }
+                
+                // Сортируем по дате (новые сначала)
+                items.sort((a, b) => new Date(b.date) - new Date(a.date));
+                galleryItems = items;
+                
+                renderGallery();
+            } catch (error) {
+                console.error('Ошибка загрузки галереи:', error);
+                galleryGrid.innerHTML = '<p style="text-align:center; color:red;">Ошибка загрузки галереи</p>';
+            }
+        }
+
+        async function addReaction(mediaId, reaction) {
+            try {
+                await openDB();
+                const transaction = db.transaction(['reactions'], 'readwrite');
+                const store = transaction.objectStore('reactions');
+                const index = store.index('mediaId');
+                
+                // Находим существующую реакцию пользователя на это медиа
+                const existingReaction = await new Promise((resolve, reject) => {
+                    const request = index.getAll(mediaId);
+                    request.onsuccess = () => {
+                        const userReaction = request.result.find(r => r.userToken === userToken);
+                        resolve(userReaction);
+                    };
+                    request.onerror = () => reject(request.error);
+                });
+                
+                if (existingReaction) {
+                    if (existingReaction.reaction === reaction) {
+                        // Удаляем реакцию
+                        store.delete(existingReaction.id);
+                    } else {
+                        // Обновляем реакцию
+                        existingReaction.reaction = reaction;
+                        existingReaction.timestamp = Date.now();
+                        store.put(existingReaction);
+                    }
+                } else {
+                    // Добавляем новую реакцию
+                    store.add({
+                        mediaId: mediaId,
+                        userToken: userToken,
+                        reaction: reaction,
+                        timestamp: Date.now()
+                    });
+                }
+                
+                await new Promise((resolve, reject) => {
+                    transaction.oncomplete = resolve;
+                    transaction.onerror = () => reject(transaction.error);
+                });
+                
+                await loadGallery();
+            } catch (error) {
+                console.error('Ошибка добавления реакции:', error);
+            }
+        }
+
+        function renderGallery() {
+            if (!galleryGrid) return;
+            
+            galleryGrid.innerHTML = '';
+            
+            if (galleryItems.length === 0) {
+                galleryGrid.innerHTML = '<p style="text-align:center; opacity:0.7; grid-column:1/-1;">Галерея пуста. Администратор может добавить фото и видео.</p>';
+                return;
             }
             
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-preview';
-            removeBtn.textContent = '×';
-            removeBtn.dataset.index = index;
-            previewItem.appendChild(removeBtn);
-            
-            previewContainer.appendChild(previewItem);
-        });
+            galleryItems.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('data-type', item.type);
+                
+                if (item.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = item.url;
+                    video.preload = 'metadata';
+                    video.playsInline = true;
+                    galleryItem.appendChild(video);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = item.url;
+                    img.alt = 'gallery image';
+                    img.loading = 'lazy';
+                    galleryItem.appendChild(img);
+                }
+                
+                // Панель реакций
+                const reactionsDiv = document.createElement('div');
+                reactionsDiv.className = 'gallery-reactions';
+                
+                REACTIONS.forEach(reaction => {
+                    const btn = document.createElement('button');
+                    btn.className = 'reaction-btn';
+                    if (item.userReaction === reaction) {
+                        btn.classList.add('active');
+                    }
+                    btn.innerHTML = `${reaction} <span class="reaction-count">${item.reactions[reaction] || 0}</span>`;
+                    btn.setAttribute('aria-label', `Реакция ${reaction}`);
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        addReaction(item.id, reaction);
+                    };
+                    reactionsDiv.appendChild(btn);
+                });
+                
+                galleryItem.appendChild(reactionsDiv);
+                
+                if (isAdmin) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-media-btn';
+                    deleteBtn.textContent = 'Удалить';
+                    deleteBtn.setAttribute('aria-label', 'Удалить медиа');
+                    deleteBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        if (confirm('Удалить этот элемент?')) {
+                            await deleteMediaItem(item.id);
+                        }
+                    };
+                    galleryItem.appendChild(deleteBtn);
+                }
 
-        document.querySelectorAll('.remove-preview').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const index = parseInt(e.target.dataset.index);
-                selectedFiles.splice(index, 1);
-                renderPreview();
-                updateFileInput();
-            });
-        });
-    }
-
-    function updateFileInput() {
-        const dt = new DataTransfer();
-        selectedFiles.forEach(file => dt.items.add(file));
-        mediaUpload.files = dt.files;
-    }
-
-    uploadBtn.addEventListener('click', () => {
-        if (!isAdmin) {
-            alert('Требуется авторизация');
-            return;
-        }
-        if (selectedFiles.length === 0) {
-            alert('Выберите файлы для загрузки');
-            return;
-        }
-
-        let processed = 0;
-        selectedFiles.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const isVideo = file.type.startsWith('video/');
-                galleryItems.push({
-                    id: Date.now() + Math.random(),
-                    type: isVideo ? 'video' : 'image',
-                    url: e.target.result,
-                    name: file.name,
-                    date: new Date().toISOString(),
-                    reactions: {
-                        '❤️': [],
-                        '👍': [],
-                        '👎': [],
-                        '🌹': [],
-                        '🎉': []
+                galleryItem.addEventListener('click', (e) => {
+                    if (!e.target.closest('.gallery-reactions') && !e.target.closest('.delete-media-btn')) {
+                        openLightbox(index);
                     }
                 });
                 
-                processed++;
-                if (processed === selectedFiles.length) {
-                    saveGallery();
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+
+        async function deleteMediaItem(id) {
+            try {
+                await openDB();
+                const transaction = db.transaction(['gallery', 'reactions'], 'readwrite');
+                const galleryStore = transaction.objectStore('gallery');
+                const reactionsStore = transaction.objectStore('reactions');
+                
+                galleryStore.delete(id);
+                
+                // Удаляем все реакции на это медиа
+                const index = reactionsStore.index('mediaId');
+                const reactions = await new Promise((resolve, reject) => {
+                    const request = index.getAllKeys(id);
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+                
+                reactions.forEach(key => reactionsStore.delete(key));
+                
+                await new Promise((resolve, reject) => {
+                    transaction.oncomplete = resolve;
+                    transaction.onerror = () => reject(transaction.error);
+                });
+                
+                await loadGallery();
+            } catch (error) {
+                console.error('Ошибка удаления медиа:', error);
+            }
+        }
+
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            updateLightboxContent();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateLightboxContent() {
+            const item = galleryItems[currentLightboxIndex];
+            if (!item) return;
+            
+            lightboxContent.innerHTML = item.type === 'video'
+                ? `<video src="${item.url}" controls autoplay playsinline></video>`
+                : `<img src="${item.url}" alt="lightbox image">`;
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxContent.innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        if (lightboxClose) {
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightboxClose.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    closeLightbox();
+                }
+            });
+        }
+
+        if (lightboxPrev) {
+            lightboxPrev.addEventListener('click', () => {
+                if (currentLightboxIndex > 0) {
+                    currentLightboxIndex--;
+                    updateLightboxContent();
+                }
+            });
+        }
+
+        if (lightboxNext) {
+            lightboxNext.addEventListener('click', () => {
+                if (currentLightboxIndex < galleryItems.length - 1) {
+                    currentLightboxIndex++;
+                    updateLightboxContent();
+                }
+            });
+        }
+
+        if (lightbox) {
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox || !lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                if (currentLightboxIndex > 0) {
+                    currentLightboxIndex--;
+                    updateLightboxContent();
+                }
+            } else if (e.key === 'ArrowRight') {
+                if (currentLightboxIndex < galleryItems.length - 1) {
+                    currentLightboxIndex++;
+                    updateLightboxContent();
+                }
+            }
+        });
+
+        // Админ-панель
+        if (showAdminBtn) {
+            showAdminBtn.addEventListener('click', () => {
+                adminPanel.classList.toggle('hidden');
+            });
+        }
+
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                if (checkPassword(adminPassword.value)) {
+                    isAdmin = true;
+                    adminLoginForm.style.display = 'none';
+                    logoutBtn.style.display = 'inline-block';
+                    adminUploadArea.classList.remove('hidden');
+                    adminPassword.value = '';
+                    loadReviews();
+                    renderGallery();
+                } else {
+                    alert('Неверный пароль');
+                }
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                isAdmin = false;
+                adminLoginForm.style.display = 'flex';
+                logoutBtn.style.display = 'none';
+                adminUploadArea.classList.add('hidden');
+                loadReviews();
+                renderGallery();
+            });
+        }
+
+        if (mediaUpload) {
+            mediaUpload.addEventListener('change', (e) => {
+                selectedFiles = Array.from(e.target.files);
+                renderPreview();
+            });
+        }
+
+        function renderPreview() {
+            if (!previewContainer) return;
+            
+            previewContainer.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const isVideo = file.type.startsWith('video/');
+                const url = URL.createObjectURL(file);
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.src = url;
+                    video.preload = 'metadata';
+                    video.playsInline = true;
+                    previewItem.appendChild(video);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = 'preview';
+                    previewItem.appendChild(img);
+                }
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-preview';
+                removeBtn.textContent = '×';
+                removeBtn.setAttribute('aria-label', 'Удалить из предпросмотра');
+                removeBtn.dataset.index = index;
+                removeBtn.onclick = () => {
+                    selectedFiles.splice(index, 1);
+                    renderPreview();
+                    updateFileInput();
+                };
+                previewItem.appendChild(removeBtn);
+                
+                previewContainer.appendChild(previewItem);
+            });
+        }
+
+        function updateFileInput() {
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            mediaUpload.files = dt.files;
+        }
+
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', async () => {
+                if (!isAdmin) {
+                    alert('Требуется авторизация');
+                    return;
+                }
+                if (selectedFiles.length === 0) {
+                    alert('Выберите файлы для загрузки');
+                    return;
+                }
+
+                try {
+                    await openDB();
+                    const transaction = db.transaction(['gallery'], 'readwrite');
+                    const store = transaction.objectStore('gallery');
+                    
+                    let processed = 0;
+                    
+                    for (const file of selectedFiles) {
+                        const base64 = await new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = (e) => resolve(e.target.result);
+                            reader.onerror = reject;
+                            reader.readAsDataURL(file);
+                        });
+                        
+                        const isVideo = file.type.startsWith('video/');
+                        
+                        store.add({
+                            id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                            type: isVideo ? 'video' : 'image',
+                            url: base64,
+                            name: file.name,
+                            date: new Date().toISOString()
+                        });
+                        
+                        processed++;
+                    }
+                    
+                    await new Promise((resolve, reject) => {
+                        transaction.oncomplete = resolve;
+                        transaction.onerror = () => reject(transaction.error);
+                    });
+                    
                     selectedFiles = [];
                     mediaUpload.value = '';
                     previewContainer.innerHTML = '';
-                    renderGallery();
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-
-    function saveGallery() {
-        localStorage.setItem('gallery', JSON.stringify(galleryItems));
-    }
-
-    function addReaction(itemId, reaction) {
-        const item = galleryItems.find(i => i.id === itemId);
-        if (!item) return;
-        
-        const userIdentifier = 'user_' + (localStorage.getItem('userReactionId') || 
-            (() => { const id = Date.now() + Math.random(); localStorage.setItem('userReactionId', id); return id; })());
-        
-        // Проверяем, ставил ли уже пользователь эту реакцию
-        const hasReacted = item.reactions[reaction].includes(userIdentifier);
-        
-        if (hasReacted) {
-            // Убираем реакцию
-            item.reactions[reaction] = item.reactions[reaction].filter(id => id !== userIdentifier);
-        } else {
-            // Убираем все другие реакции пользователя с этого медиа
-            REACTIONS.forEach(r => {
-                item.reactions[r] = item.reactions[r].filter(id => id !== userIdentifier);
-            });
-            // Добавляем новую реакцию
-            item.reactions[reaction].push(userIdentifier);
-        }
-        
-        saveGallery();
-        renderGallery();
-    }
-
-    function renderGallery() {
-        galleryGrid.innerHTML = '';
-        galleryItems.forEach((item, index) => {
-            const galleryItem = document.createElement('div');
-            galleryItem.className = 'gallery-item';
-            galleryItem.setAttribute('data-type', item.type);
-            
-            if (item.type === 'video') {
-                const video = document.createElement('video');
-                video.src = item.url;
-                video.preload = 'metadata';
-                galleryItem.appendChild(video);
-            } else {
-                const img = document.createElement('img');
-                img.src = item.url;
-                img.alt = 'gallery image';
-                img.loading = 'lazy';
-                galleryItem.appendChild(img);
-            }
-            
-            // Панель реакций
-            const reactionsDiv = document.createElement('div');
-            reactionsDiv.className = 'gallery-reactions';
-            
-            REACTIONS.forEach(reaction => {
-                const btn = document.createElement('button');
-                btn.className = 'reaction-btn';
-                btn.innerHTML = `${reaction} <span class="reaction-count">${item.reactions[reaction].length}</span>`;
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    addReaction(item.id, reaction);
-                };
-                reactionsDiv.appendChild(btn);
-            });
-            
-            galleryItem.appendChild(reactionsDiv);
-            
-            if (isAdmin) {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-media-btn';
-                deleteBtn.textContent = 'Удалить';
-                deleteBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    galleryItems.splice(index, 1);
-                    saveGallery();
-                    renderGallery();
-                };
-                galleryItem.appendChild(deleteBtn);
-            }
-
-            galleryItem.addEventListener('click', (e) => {
-                if (!e.target.closest('.gallery-reactions') && !e.target.closest('.delete-media-btn')) {
-                    openLightbox(index);
+                    await loadGallery();
+                    
+                    alert(`Загружено ${processed} файлов`);
+                } catch (error) {
+                    console.error('Ошибка загрузки:', error);
+                    alert('Ошибка загрузки файлов. Возможно, файл слишком большой.');
                 }
             });
-            
-            galleryGrid.appendChild(galleryItem);
-        });
-    }
-
-    function openLightbox(index) {
-        currentLightboxIndex = index;
-        updateLightboxContent();
-        lightbox.classList.add('active');
-    }
-
-    function updateLightboxContent() {
-        const item = galleryItems[currentLightboxIndex];
-        lightboxContent.innerHTML = item.type === 'video'
-            ? `<video src="${item.url}" controls autoplay></video>`
-            : `<img src="${item.url}" alt="lightbox image">`;
-    }
-
-    lightboxClose.addEventListener('click', () => {
-        lightbox.classList.remove('active');
-        lightboxContent.innerHTML = '';
-    });
-
-    lightboxPrev.addEventListener('click', () => {
-        if (currentLightboxIndex > 0) {
-            currentLightboxIndex--;
-            updateLightboxContent();
         }
-    });
 
-    lightboxNext.addEventListener('click', () => {
-        if (currentLightboxIndex < galleryItems.length - 1) {
-            currentLightboxIndex++;
-            updateLightboxContent();
+        // Экспорт/Импорт данных
+        if (exportDataBtn) {
+            exportDataBtn.addEventListener('click', async () => {
+                if (!isAdmin) {
+                    alert('Требуется авторизация');
+                    return;
+                }
+                
+                try {
+                    await openDB();
+                    
+                    // Получаем все данные
+                    const reviews = await new Promise((resolve, reject) => {
+                        const transaction = db.transaction(['reviews'], 'readonly');
+                        const store = transaction.objectStore('reviews');
+                        const request = store.getAll();
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    
+                    const gallery = await new Promise((resolve, reject) => {
+                        const transaction = db.transaction(['gallery'], 'readonly');
+                        const store = transaction.objectStore('gallery');
+                        const request = store.getAll();
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    
+                    const reactions = await new Promise((resolve, reject) => {
+                        const transaction = db.transaction(['reactions'], 'readonly');
+                        const store = transaction.objectStore('reactions');
+                        const request = store.getAll();
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    
+                    const data = {
+                        reviews,
+                        gallery,
+                        reactions,
+                        exportDate: new Date().toISOString()
+                    };
+                    
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `rukinov_backup_${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                } catch (error) {
+                    console.error('Ошибка экспорта:', error);
+                    alert('Ошибка экспорта данных');
+                }
+            });
         }
-    });
 
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            lightbox.classList.remove('active');
-            lightboxContent.innerHTML = '';
+        if (importDataInput) {
+            importDataInput.addEventListener('change', async (e) => {
+                if (!isAdmin) {
+                    alert('Требуется авторизация');
+                    return;
+                }
+                
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                try {
+                    const text = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.onerror = reject;
+                        reader.readAsText(file);
+                    });
+                    
+                    const data = JSON.parse(text);
+                    
+                    await openDB();
+                    
+                    // Очищаем и заполняем хранилища
+                    if (data.reviews) {
+                        const tx1 = db.transaction(['reviews'], 'readwrite');
+                        const store1 = tx1.objectStore('reviews');
+                        await new Promise((resolve, reject) => {
+                            const request = store1.clear();
+                            request.onsuccess = resolve;
+                            request.onerror = () => reject(request.error);
+                        });
+                        data.reviews.forEach(r => store1.add(r));
+                        await new Promise((resolve, reject) => {
+                            tx1.oncomplete = resolve;
+                            tx1.onerror = () => reject(tx1.error);
+                        });
+                    }
+                    
+                    if (data.gallery) {
+                        const tx2 = db.transaction(['gallery'], 'readwrite');
+                        const store2 = tx2.objectStore('gallery');
+                        await new Promise((resolve, reject) => {
+                            const request = store2.clear();
+                            request.onsuccess = resolve;
+                            request.onerror = () => reject(request.error);
+                        });
+                        data.gallery.forEach(g => store2.add(g));
+                        await new Promise((resolve, reject) => {
+                            tx2.oncomplete = resolve;
+                            tx2.onerror = () => reject(tx2.error);
+                        });
+                    }
+                    
+                    if (data.reactions) {
+                        const tx3 = db.transaction(['reactions'], 'readwrite');
+                        const store3 = tx3.objectStore('reactions');
+                        await new Promise((resolve, reject) => {
+                            const request = store3.clear();
+                            request.onsuccess = resolve;
+                            request.onerror = () => reject(request.error);
+                        });
+                        data.reactions.forEach(r => store3.add(r));
+                        await new Promise((resolve, reject) => {
+                            tx3.oncomplete = resolve;
+                            tx3.onerror = () => reject(tx3.error);
+                        });
+                    }
+                    
+                    await loadReviews();
+                    await loadGallery();
+                    
+                    alert('Данные успешно импортированы!');
+                    importDataInput.value = '';
+                } catch (error) {
+                    console.error('Ошибка импорта:', error);
+                    alert('Ошибка при импорте данных: неверный формат файла');
+                    importDataInput.value = '';
+                }
+            });
         }
-    });
 
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('active')) return;
-        if (e.key === 'Escape') {
-            lightbox.classList.remove('active');
-            lightboxContent.innerHTML = '';
-        } else if (e.key === 'ArrowLeft') {
-            if (currentLightboxIndex > 0) {
-                currentLightboxIndex--;
-                updateLightboxContent();
-            }
-        } else if (e.key === 'ArrowRight') {
-            if (currentLightboxIndex < galleryItems.length - 1) {
-                currentLightboxIndex++;
-                updateLightboxContent();
-            }
-        }
-    });
-
-    // Экспорт/Импорт данных
-    exportDataBtn.addEventListener('click', () => {
-        if (!isAdmin) {
-            alert('Требуется авторизация');
-            return;
-        }
-        
-        const data = {
-            reviews: JSON.parse(localStorage.getItem('reviews') || '[]'),
-            gallery: galleryItems,
-            exportDate: new Date().toISOString()
-        };
-        
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `rukinov_backup_${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-
-    importDataInput.addEventListener('change', (e) => {
-        if (!isAdmin) {
-            alert('Требуется авторизация');
-            return;
-        }
-        
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = (event) => {
+        // Инициализация
+        (async function init() {
             try {
-                const data = JSON.parse(event.target.result);
-                
-                if (data.reviews) {
-                    localStorage.setItem('reviews', JSON.stringify(data.reviews));
-                }
-                if (data.gallery) {
-                    galleryItems = data.gallery;
-                    saveGallery();
-                }
-                
-                loadReviews();
-                renderGallery();
-                alert('Данные успешно импортированы!');
+                await openDB();
+                await loadReviews();
+                await loadGallery();
             } catch (error) {
-                alert('Ошибка при импорте данных: неверный формат файла');
+                console.error('Ошибка инициализации БД:', error);
             }
-            
-            importDataInput.value = '';
-        };
-        reader.readAsText(file);
-    });
+        })();
 
-    // Инициализация
-    loadReviews();
-    renderGallery();
+    })();
 </script>
 </body>
-    </html>
+ </html>
