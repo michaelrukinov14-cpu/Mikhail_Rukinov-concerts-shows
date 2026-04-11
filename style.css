@@ -787,6 +787,366 @@ body.dark .file-label {
     margin-bottom: 2rem;
     border: 1px solid rgba(139, 94, 44, 0.2);
 }
+/* ===== ГАЛЕРЕЯ ===== */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(139, 94, 44, 0.2);
+    transition: 0.3s;
+}
+
+body.dark .gallery-item {
+    background: rgba(20, 20, 28, 0.5);
+    border-color: rgba(228, 179, 99, 0.3);
+}
+
+.gallery-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.gallery-item img,
+.gallery-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-item video {
+    background: #000;
+}
+
+/* Плей-иконка для видео */
+.gallery-item[data-type="video"]::after {
+    content: "▶";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(139, 94, 44, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    z-index: 2;
+}
+
+body.dark .gallery-item[data-type="video"]::after {
+    background: rgba(228, 179, 99, 0.8);
+}
+
+/* Реакции на медиа */
+.gallery-reactions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 0.8rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 3;
+}
+
+body.dark .gallery-reactions {
+    background: rgba(10, 10, 12, 0.8);
+}
+
+.gallery-item:hover .gallery-reactions {
+    transform: translateY(0);
+}
+
+.reaction-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    transition: 0.2s;
+    color: white;
+}
+
+.reaction-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.reaction-btn.active {
+    background: rgba(139, 94, 44, 0.5);
+}
+
+.reaction-count {
+    font-size: 0.8rem;
+    color: white;
+    font-weight: 600;
+}
+
+/* Панель администратора */
+.admin-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(139, 94, 44, 0.2);
+}
+
+body.dark .admin-panel {
+    background: rgba(20, 20, 28, 0.6);
+    border-color: rgba(228, 179, 99, 0.3);
+}
+
+.admin-panel.hidden {
+    display: none;
+}
+
+.admin-login {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-login input {
+    padding: 0.8rem 1.2rem;
+    border-radius: 40px;
+    border: 1px solid rgba(139, 94, 44, 0.3);
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+body.dark .admin-login input {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(228, 179, 99, 0.3);
+    color: #EDEDED;
+}
+
+.admin-login input:focus {
+    border-color: #8B5E2C;
+}
+
+.admin-upload-area {
+    margin-top: 1.5rem;
+    padding: 1rem 0;
+}
+
+.admin-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.file-label {
+    background: #8B5E2C;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.file-label:hover {
+    background: #6F4A20;
+}
+
+body.dark .file-label {
+    background: #E4B363;
+    color: #0A0A0C;
+}
+
+.admin-controls input[type="file"] {
+    display: none;
+}
+
+.preview-container {
+    margin-top: 1.5rem;
+}
+
+.preview-item {
+    display: inline-block;
+    position: relative;
+    margin: 0.5rem;
+}
+
+.preview-item img,
+.preview-item video {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(139, 94, 44, 0.3);
+}
+
+.remove-preview {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    background: #8B5E2C;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Лайтбокс */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    position: relative;
+}
+
+.lightbox-content img,
+.lightbox-content video {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 2001;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(139, 94, 44, 0.5);
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+}
+
+.lightbox-close:hover {
+    background: rgba(139, 94, 44, 0.8);
+}
+
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(139, 94, 44, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: 0.2s;
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    background: rgba(139, 94, 44, 0.8);
+}
+
+.delete-media-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 5;
+}
+
+.gallery-item:hover .delete-media-btn {
+    opacity: 1;
+}
+
+/* Кнопка экспорта данных */
+.export-controls {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ===== ОТЗЫВЫ ===== */
+.reviews-container {
+    margin-top: 2rem;
+}
+
+.review-form {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(139, 94, 44, 0.2);
+}
 
 body.dark .review-form {
     background: rgba(20, 20, 28, 0.6);
@@ -862,6 +1222,7 @@ body.dark .form-group textarea {
     border-radius: 20px;
     padding: 1.5rem;
     border-left: 4px solid #8B5E2C;
+    position: relative;
 }
 
 body.dark .review-card {
@@ -909,6 +1270,25 @@ body.dark .review-text {
     color: #CCCCCC;
 }
 
+.delete-review-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(220, 53, 69, 0.8);
+    color: white;
+    border: none;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.review-card:hover .delete-review-btn {
+    opacity: 1;
+}
+
 /* Кнопка галереи в меню */
 .nav-links .gallery-link {
     color: #1A1A1E;
@@ -928,4 +1308,4 @@ body.dark .nav-links .gallery-link {
 
 body.dark .nav-links .gallery-link:hover {
     color: #E4B363;
-}
+                          }
